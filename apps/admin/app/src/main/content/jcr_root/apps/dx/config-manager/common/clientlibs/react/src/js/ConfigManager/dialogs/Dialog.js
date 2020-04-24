@@ -23,6 +23,8 @@ import ConfigDialog from './ConfigDialog';
 import DeleteDialog from './DeleteDialog';
 
 const Dialog = (props) => {
+    console.log(props);
+
     const empty = () => {
         return null;
     };

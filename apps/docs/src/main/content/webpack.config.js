@@ -53,10 +53,6 @@ module.exports = {
             },
         ],
     },
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin()],
-    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env.SCALE_MEDIUM': 'true',
@@ -69,5 +65,6 @@ module.exports = {
         new MiniCssExtractPlugin({ filename: '[name]/dist/css/app.min.css' }),
         new OptimizeCSSAssetsPlugin({}),
     ],
+    devtool: 'eval-cheap-module-source-map',
     stats,
 };
