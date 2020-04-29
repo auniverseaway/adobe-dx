@@ -15,11 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
      data-sly-call="${clientlib.css @ categories='dx.configmanager.react'}"></sly>
-  <section id="dx-ContentFrame" data-columnview-datasource="${resource.path}"></section>
-
+<section id="dx-ContentFrame" data-columnview-datasource="${resource.path}"></section>
 <!-- Create the Registry for Configs to use -->
-<sly data-sly-call="${clientlib.js @ categories='dx.configmanager.registry'}"></sly>
-<!-- Expose a clientlib category for consumers to add to registry -->
-<sly data-sly-call="${clientlib.js @ categories='dx.configmanager.configs'}"></sly>
-<!-- Run the Config Manager against the registered configs -->
-<sly data-sly-call="${clientlib.js @ categories='dx.configmanager.react'}"></sly>
+<sly data-sly-call="${clientlib.js @ categories='dx.configmanager.registry, dx.configmanager.configs, dx.configmanager.react'}"></sly>
