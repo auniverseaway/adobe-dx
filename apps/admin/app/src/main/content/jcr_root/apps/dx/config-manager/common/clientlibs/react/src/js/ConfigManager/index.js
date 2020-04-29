@@ -100,12 +100,14 @@ export default class ConfigManager extends React.Component {
                     onNavigate={this.navigate}
                     allowsSelection />
             </Provider>
-            <Dialog
-                open={this.state.dialogType !== undefined}
-                dialogType={this.state.dialogType}
-                onDialogClose={this.closeDialog}
-                configKey={this.state.configKey}
-                item={this.state.selectedItem} />
+            if (this.state.dialogType) {
+                <Dialog
+                    open={this.state.dialogType !== undefined}
+                    dialogType={this.state.dialogType}
+                    onDialogClose={this.closeDialog}
+                    configKey={this.state.configKey}
+                    item={this.state.selectedItem} />
+            }
         </>);
     }
 }

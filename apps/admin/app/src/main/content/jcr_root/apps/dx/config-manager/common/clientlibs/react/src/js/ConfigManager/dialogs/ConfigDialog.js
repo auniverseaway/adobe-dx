@@ -48,8 +48,6 @@ export default class ConfigDialog extends React.Component {
             }).catch(err => {
                 console.log('Error: ', err);
             });
-        console.log('Config Tree');
-        console.log(configTree);
         let { configKey } = configTree;
         if (this.props.item.isPage) {
             configKey = configTree['jcr:content'].configKey;

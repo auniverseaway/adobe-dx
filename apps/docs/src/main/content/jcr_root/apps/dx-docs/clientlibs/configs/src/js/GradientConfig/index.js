@@ -76,7 +76,7 @@ export default class GradientConfig extends React.Component {
                         placeholder="name"
                         onChange={this.onNameChange} />
                 </FormItem>
-                <FormItem label="Label">
+                <FormItem label="Text">
                     <Textfield
                         name="text"
                         value={this.state.data.text}
