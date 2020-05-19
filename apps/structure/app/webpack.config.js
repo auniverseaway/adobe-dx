@@ -1,5 +1,5 @@
-    /*
- *  Copyright 2019 Adobe
+/*
+ *  Copyright 2020 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,11 +22,44 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const stats = require('./webpack.config/stats');
 
 const projectName = 'dx';
-const project = `./src/main/content/jcr_root/apps/${projectName}/config-manager/common/clientlibs`;
+const project = `./src/main/content/jcr_root/apps/${projectName}/clientlibs/base`;
+
+const isProduction = process.env.NODE_ENV === 'production';
+if (isProduction) {
+    console.log('Production Build');
+}
+
+const rules = [
+    {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'babel-loader'
+        }
+    },
+    {
+        test: /\.(css|less)$/,
+        use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'less-loader',
+        ],
+    },
+];
+
+if (!isProduction) {
+    rules.push({
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'prettier-loader',
+        },
+    });
+}
 
 module.exports = {
     entry: {
-        react: [
+        author: [
             `${project}/react/src/js/app.js`,
             `${project}/react/src/less/app.less`,
         ],
@@ -36,23 +69,7 @@ module.exports = {
         filename: '[name]/dist/js/app.min.js',
     },
     module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
-            },
-            {
-                test: /\.(css|less)$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    'less-loader',
-                ],
-            },
-        ],
+        rules,
     },
     optimization: {
         minimize: true,
