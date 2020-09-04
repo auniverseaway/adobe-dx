@@ -19,18 +19,19 @@
     <parent>
         <groupId>com.adobe.dx</groupId>
         <artifactId>parent</artifactId>
-        <version>14</version>
+        <version>16</version>
     </parent>
     <artifactId>testing</artifactId>
     <name>${project.prefix} - Testing</name>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.11-SNAPSHOT</version>
     <description>Testing utilities for dx project</description>
 
     <scm>
         <connection>scm:git:https://github.com/adobe/adobe-dx.git</connection>
         <developerConnection>scm:git:git@github.com:adobe/adobe-dx.git</developerConnection>
         <url>https://github.com/adobe/adobe-dx/bundles/testing/tree/master</url>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
     
     <build>
         <plugins>
@@ -41,13 +42,6 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>uber-jar</artifactId>
-            <version>${aem.version}</version>
-            <classifier>apis</classifier>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.annotation.versioning</artifactId>
@@ -68,7 +62,37 @@
         <dependency>
             <groupId>io.wcm</groupId>
             <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
+            <version>3.0.2</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.logging-mock</artifactId>
+            <version>2.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.sling-mock-oak</artifactId>
+            <version>2.1.10-1.16.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
+            <scope>compile</scope>
+            <version>1.3.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
@@ -83,16 +107,11 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-lang3</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>compile</scope>
+            <groupId>com.adobe.aem</groupId>
+            <artifactId>uber-jar</artifactId>
+            <version>${aem.version}</version>
+            <classifier>apis</classifier>
+            <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

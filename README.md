@@ -1,5 +1,7 @@
-# Adobe Dx ![Build](https://github.com/adobe/adobe-dx/workflows/Build/badge.svg)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=com.adobe.dx%3Areactor)](https://sonarcloud.io/dashboard?id=com.adobe.dx%3Areactor)
+# Adobe Dx
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=com.adobe.dx%3Areactor)](https://sonarcloud.io/dashboard?id=com.adobe.dx%3Areactor) 
+
+![Build](https://github.com/adobe/adobe-dx/workflows/Build/badge.svg) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.adobe.dx%3Areactor&metric=coverage)](https://sonarcloud.io/dashboard?id=com.adobe.dx%3Areactor)
 
 ### Description 
 
@@ -7,7 +9,7 @@ A toolkit for AEM to help build exceptional digital experiences, on top of [AEM 
 
 #### building DX modules
 
-first ensure you have both `github-dx` maven repository setup ([server and repository as in this settings.xml file](./settings.xml))
+first ensure you have adobe public repository setup ([see 'adobe-public' profile in our bots settings.xml file](./settings.xml))
 
 DX is a set of modules that can be used separately, you can build them all using
  

@@ -17,6 +17,7 @@
     </profile>
 </profiles>
 ```
+- please also upload your public key to some key server e.g. `gpg --keyserver keys.openpgp.org --send-key <keyid>`
 - note that depending on your OS, you may hit https://issues.apache.org/jira/browse/MGPG-59 which is plugin's gpg agent trying 
 to access IO. Message being something like 
 
@@ -26,6 +27,7 @@ As proposed in the ticket, in order to counter balance this, pls execute followi
 
 ```gpg -u <your key's email> --use-agent --armor --detach-sign --output $(mktemp) pom.xml```
 
+For mac users, you can fix it by installing [pinentry-mac](https://github.com/Homebrew/homebrew-core/issues/14737#issuecomment-309547412)
 ## Release
 
 ### commands
@@ -41,5 +43,5 @@ if things looks good to you, you can rollback all changes
 ```mvn release:perform -Pdx-release```
 5. (if anything goes wrong) rollback the release
 ```mvn release:rollback -Pdx-release``` 
-6. (if things went well) go to https://github.com/adobe/adobe-dx/packages 
+6. (if things went well) go to https://repo1.maven.org/maven2/com/adobe/dx 
 and check there released artifacts. Eventually do an announce / gh release if important one.

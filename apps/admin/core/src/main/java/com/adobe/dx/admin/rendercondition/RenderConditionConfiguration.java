@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2020 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,8 +13,15 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
- @Version("0.1.0")
- package com.adobe.dx.responsive;
- 
- import org.osgi.annotation.versioning.Version;
- 
+package com.adobe.dx.admin.rendercondition;
+
+import org.apache.sling.caconfig.annotation.Configuration;
+import org.apache.sling.caconfig.annotation.Property;
+
+@Configuration(label="Render Condition Configuration", description="Holds configuration for render conditions")
+public @interface RenderConditionConfiguration {
+
+    @Property(label="passthrough groups", description = "list of groups for which render condition should always be true")
+    String[] passthroughGroups() default { "template-authors", "administrators"};
+
+}

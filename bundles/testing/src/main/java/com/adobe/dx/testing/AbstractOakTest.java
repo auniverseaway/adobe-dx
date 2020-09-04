@@ -13,8 +13,13 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.dx.responsive;
+package com.adobe.dx.testing;
 
-public interface ResponsiveService {
-    String[] getBreakpoints();
+import org.apache.sling.testing.mock.sling.ResourceResolverType;
+
+public class AbstractOakTest extends AbstractTest {
+    @Override
+    protected ResourceResolverType getType() {
+        return ResourceResolverType.JCR_OAK;
+    }
 }
