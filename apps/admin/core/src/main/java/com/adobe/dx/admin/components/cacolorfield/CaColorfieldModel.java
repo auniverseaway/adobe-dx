@@ -2,15 +2,18 @@ package com.adobe.dx.admin.components.cacolorfield;
 
 import com.adobe.dx.admin.datasource.internal.ContextAwareDatasource;
 import com.adobe.granite.ui.components.Config;
-import com.adobe.granite.ui.components.Field;
 import com.adobe.granite.ui.components.ds.DataSource;
-import com.day.util.UUID;
+import com.day.cq.wcm.api.components.ComponentContext;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +23,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
@@ -33,102 +37,144 @@ public class CaColorfieldModel {
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    private Iterator<Resource> items;
+    @ScriptVariable
+    private ComponentContext compContext;
+
+    private Config cfg;
+
+    private List<Resource> items;
+
+    private Map<String, Object> attrs;
 
     private String name;
+    private String contentValue;
+    private String configValue;
     private String fieldLabel;
     private String fieldDesc;
     private String placeholder;
-    private boolean disabled;
     private boolean required;
     private String labelId;
-    private String labeledBy;
     private String descriptionId;
-    private String variant;
-    private String autoGenerateColors;
-    private boolean showSwatches;
-    private String showSwatchesCoralized;
-    private boolean showProperties;
-    private String showPropertiesCoralized;
-    private boolean showDefaultColors;
-    private String showDefaultColorsCoralized;
-    private String validation;
 
     @PostConstruct
     private void init() {
-        Resource componentResource = request.getResource();
+        Resource dialogComponent = request.getResource();
 
         // Setup basics
-        final Config cfg = new Config(componentResource);
-        ValueMap vm = (ValueMap) request.getAttribute(Field.class.getName());
-        String uuid = UUID.create().toString();
+        cfg = new Config(dialogComponent);
+        String uuid = UUID.randomUUID().toString();
 
-        // Get the DataSource
+        // Wire up the DataSource
         request.adaptTo(ContextAwareDatasource.class);
-        DataSource ds = (DataSource) request.getAttribute(DataSource.class.getName());
-        if (ds != null) {
-            items = ds.iterator();
-        }
+        items = getDataSourceItems();
 
-        // Get Component Props
+        // Get individual component props
         name = cfg.get("name", String.class);
-        fieldLabel = cfg.get("fieldLabel", String.class);
-        fieldDesc = cfg.get("fieldDescription", String.class);
-        placeholder = cfg.get("emptyText", String.class);
-        disabled = cfg.get("disabled", false);
+        String propName = name.replace("./", "");
+        
+        // Setup content & config values
+        ValueMap contentVm = getContentValueMap();
+        contentValue = contentVm.get(propName, String.class);
+        configValue = setupConfigValue();
+        
         required = cfg.get("required", false);
+        String requiredAsterisk = required ? " *" : "";
+        fieldLabel = cfg.get("fieldLabel", String.class);
+
+        fieldLabel = fieldLabel + requiredAsterisk;
+        fieldDesc = cfg.get("fieldDescription", String.class);
+        
         labelId = "label_" + uuid;
         descriptionId = "description_" + uuid;
-        labeledBy = labelId + " " + descriptionId;
-        variant = cfg.get("variant", "default");
-        autoGenerateColors = cfg.get("autogenerateColors", "off");
-        showSwatches = cfg.get("showSwatches", true);
-        showSwatchesCoralized = showSwatches ? "on" : "off";
-        showProperties = cfg.get("showProperties", true);
-        showPropertiesCoralized = showProperties ? "on" : "off";
-        showDefaultColors = cfg.get("showDefaultColors", true);
-        showDefaultColorsCoralized = showDefaultColors ? "on" : "off";
-        validation = StringUtils.join(cfg.get("validation", new String[0]), " ");
+
+        // Build attributes to lessen manual HTL work
+        attrs = new HashMap<String, Object>();
+        attrs.put("placeholder", cfg.get("emptyText", String.class));
+        attrs.put("disabled", cfg.get("disabled", false));
+        attrs.put("required", required);
+
+        String labeledBy = labelId + " " + descriptionId;
+        attrs.put("labelledby", labeledBy);
+
+        attrs.put("aria-labelledby", labeledBy);
+
+        attrs.put("variant", cfg.get("variant", "default"));
+
+        attrs.put("autogeneratecolors", cfg.get("autogenerateColors", "off"));
+
+        boolean showSwatches = cfg.get("showSwatches", true);
+        attrs.put("showswatches", showSwatches ? "on" : "off");
+
+        boolean showProperties = cfg.get("showProperties", true);
+        attrs.put("showproperties", showProperties ? "on" : "off");
+
+        boolean showDefaultColors = cfg.get("showDefaultColors", true);
+        attrs.put("showdefaultcolors", showDefaultColors ? "on" : "off");
+
+        String validation = StringUtils.join(cfg.get("validation", new String[0]), " ");
+        attrs.put("validation", validation);
+        attrs.put("data-foundation-validation", validation);
     }
 
-    public List<Resource> getItems() {
-        if (items != null) {
-            return IteratorUtils.toList(items);
+    private ValueMap getContentValueMap() {
+        String resourcePath = request.getRequestPathInfo().getSuffix();
+        Resource resource = resourceResolver.getResource(resourcePath);
+        return resource.getValueMap();
+    }
+
+    private List<Resource> getDataSourceItems() {
+        DataSource ds = (DataSource) request.getAttribute(DataSource.class.getName());
+        if (ds != null) {
+            Iterator<Resource> is = ds.iterator();
+            if (is != null) {
+                return IteratorUtils.toList(is);
+            }
         }
         return Collections.emptyList();
     }
 
+    private String setupConfigValue() {
+        if (contentValue != null && items.size() > 0) {
+            Resource configRes = items.stream().filter(item -> {
+                return item.getValueMap().get("value", String.class).equals(contentValue);
+            }).findFirst().orElse(null);
+            if (configRes != null) {
+                return configRes.getValueMap().get("initialValue", String.class);
+            }
+            return contentValue;
+        }
+        return cfg.get("value", String.class);
+    }
 
+    public List<Resource> getItems() {
+        return items;
+    }
+    
+    public String getName() {
+        return name;
+    }
 
-    // Config cfg = cmp.getConfig();
-    // Tag tag = cmp.consumeTag();
-    // AttrBuilder attrs = tag.getAttrs();
-    // cmp.populateCommonAttrs(attrs);
+    public String getContentValue() {
+        return contentValue;
+    }
 
-    // 
-    // attrs.add("value", vm.get("value", String.class));
+    public String getConfigValue() {
+        return configValue;
+    }
 
-    // attrs.add("name", cfg.get("name", String.class));
-    // attrs.add("placeholder", i18n.getVar(cfg.get("emptyText", String.class)));
-    // attrs.addDisabled();
-    // attrs.addBoolean("required", );
-    // attrs.add("labelledby", );
+    public String getFieldLabel() {
+        return fieldLabel;
+    }
 
-    // attrs.add("variant", );
-    // attrs.add("autoGenerateColors", );
+    public String getFieldDesc() {
+        return fieldDesc;
+    }
 
-    // boolean showSwatches = 
-    // attrs.add("showSwatches", showSwatches ? "on" : "off");
+    public String getPlaceholder() {
+        return placeholder;
+    }
 
-    // boolean showProperties = cfg.get("showProperties", true);
-    // attrs.add("showProperties", showProperties ? "on" : "off");
-
-    // boolean showDefaultColors = cfg.get("showDefaultColors", true);
-    // attrs.add("showDefaultColors", showDefaultColors ? "on" : "off");
-
-    // String validation = StringUtils.join(cfg.get("validation", new String[0]), " ");
-    // attrs.add("data-foundation-validation", validation);
-    // attrs.add("data-validation", validation);
-
-    // Iterator<Resource> items = cmp.getItemDataSource().iterator();
+    public Map<String, Object> getBulkAttributes() {
+        return attrs;
+    }
 }
