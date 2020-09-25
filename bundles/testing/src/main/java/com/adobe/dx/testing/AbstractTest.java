@@ -29,10 +29,11 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 @ExtendWith(AemContextExtension.class)
 public class AbstractTest {
 
-    protected static final String CONTENT_ROOT = "/content/foo";
-    protected static final String CONF_ROOT = "/conf/foo";
+    public static final String CONTENT_ROOT = "/content/foo";
+    public static final String CONF_ROOT = "/conf/foo";
+    public static final String CONFIG_ROOTS = CONF_ROOT + "/sling:configs";
 
-    protected AemContext context = buildContext(getType());
+    public AemContext context = buildContext(getType());
 
     protected ResourceResolverType getType() {
         return ResourceResolverType.RESOURCERESOLVER_MOCK;
@@ -44,11 +45,25 @@ public class AbstractTest {
             .build();
     }
 
-    protected ValueMap getVM(String path) {
+    public static void initContentRoots(AemContext context) {
+        if (context.resourceResolver().getResource(CONFIG_ROOTS) == null) {
+            context.create().resource(CONF_ROOT + "/sling:configs");
+        }
+        if (context.resourceResolver().getResource(CONTENT_ROOT) == null) {
+            context.create().resource(CONTENT_ROOT);
+        }
+        context.build().resource(CONTENT_ROOT, "sling:configRef", CONF_ROOT);
+    }
+
+    public static ValueMap getVM(AemContext context, String path) {
         Resource resource = context.resourceResolver().getResource(path);
         if (resource != null) {
             return resource.getValueMap();
         }
         return null;
+    }
+
+    protected ValueMap getVM(String path) {
+        return getVM(context, path);
     }
 }

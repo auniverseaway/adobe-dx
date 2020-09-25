@@ -13,24 +13,74 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 package com.adobe.dx.structure.flex;
 
+import com.adobe.dx.domtagging.AttributeService;
+import com.adobe.dx.domtagging.IDTagger;
+import com.adobe.dx.inlinestyle.InlineStyleService;
+
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 
-@Model(adaptables = { SlingHttpServletRequest.class,
-        Resource.class }, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
+@Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class FlexModel {
 
-    @SlingObject
-    protected Resource resource;
+    public static final String PN_MINHEIGHT = "minHeight";
+    public static final String PN_MINHEIGHT_VALUE = PN_MINHEIGHT + "Value";
+    public static final String PN_MINHEIGHT_TYPE = PN_MINHEIGHT + "Type";
 
-    public String getHello() {
-        return "Hello";
+    @SlingObject
+    protected SlingHttpServletRequest request;
+
+    @OSGiService
+    IDTagger idTagger;
+
+    @OSGiService
+    InlineStyleService styleService;
+
+    @OSGiService
+    AttributeService attributeService;
+
+    String id;
+
+    String style;
+
+    String additionalClasses;
+
+    Map<String, String> attributes;
+
+    @PostConstruct
+    void init() {
+        if (idTagger != null) {
+            id = idTagger.computeComponentId(request, null);
+        }
+        if (styleService != null) {
+            style = styleService.getInlineStyle(getId(), request);
+        }
+        if (attributeService != null) {
+            attributes = attributeService.getAttributes(request);
+            additionalClasses = attributeService.getClassesString(request);
+        }
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public String getAdditionalClasses() {
+        return additionalClasses;
+    }
+
+    public Map<String, String> getAttributes() { return attributes; }
 }

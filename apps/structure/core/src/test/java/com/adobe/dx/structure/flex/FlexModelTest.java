@@ -16,15 +16,40 @@
 package com.adobe.dx.structure.flex;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import com.adobe.dx.testing.AbstractRequestModelTest;
+import com.adobe.dx.testing.extensions.WCMModeDisabledContext;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 class FlexModelTest extends AbstractRequestModelTest {
 
+    FlexModel model;
+
+    @BeforeEach
+    public void setup() {
+        model = getModel(FlexModel.class, CONTENT_ROOT);
+    }
+
     @Test
-    void getHello() throws ReflectiveOperationException {
-        assertEquals("Hello", getModel(FlexModel.class).getHello());
+    public void testId() {
+        assertNotNull(model.getId());
+    }
+
+    @Test
+    public void testStyle() {
+        assertNotNull(model.getStyle());
+    }
+
+    @ExtendWith(WCMModeDisabledContext.class)
+    @Test
+    public void testAuthorVH() {
+        assertNull(model.getAttributes());
+    }
+
+    @Test
+    public void testClasses() {
+        assertNull(model.getAdditionalClasses());
     }
 }

@@ -72,7 +72,7 @@
                         <embedded>
                             <groupId>com.adobe.dx</groupId>
                             <artifactId>admin</artifactId>
-                            <target>/apps/dx-docs-packages/application/install</target>
+                            <target>/apps/dx-docs-packages/application/install.author</target>
                             <filter>true</filter>
                         </embedded>
                         <embedded>
@@ -134,13 +134,13 @@
         <dependency>
             <groupId>com.adobe.dx</groupId>
             <artifactId>admin</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1-SNAPSHOT</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>com.adobe.dx</groupId>
             <artifactId>structure</artifactId>
-            <version>0.0.6</version>
+            <version>0.0.7-SNAPSHOT</version>
             <type>zip</type>
         </dependency>
         <dependency>
@@ -152,7 +152,7 @@
         <dependency>
             <groupId>com.adobe.dx</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.12</version>
+            <version>0.0.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.adobe.dx</groupId>
