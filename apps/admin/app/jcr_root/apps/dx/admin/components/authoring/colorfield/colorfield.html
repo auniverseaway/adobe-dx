@@ -1,0 +1,20 @@
+<div data-sly-use.model="com.adobe.dx.admin.components.cacolorfield.CaColorfieldModel" class="dx-CA-Colorfield">
+    <label id="${model.labelId}" class="coral-Form-fieldlabel">${model.fieldLabel}</label>
+    <coral-colorinput class="coral-Form-field _coral-ColorInput"
+                    labelledby="${model.labeledBy}"
+                    aria-labelledby="${model.labeledBy}"
+                    role="group" 
+                    aria-invalid="false"
+                    value="${model.value}"
+                    variant="${model.variant}"
+                    autogeneratecolors="${model.autoGenerateColors}"
+                    showswatches="${model.showSwatchesCoralized}"
+                    showproperties="${model.showPropertiesCoralized}"
+                    showdefaultcolors="${model.showDefaultColorsCoralized}"
+                    validation="${model.validation}"
+                    data-foundation-validation="${model.validation}"
+                    data-sly-list.color="${model.items}">
+        <coral-colorinput-item value="${color.value}" data-dx-value="${color.name}"></coral-colorinput-item>
+    </coral-colorinput>
+    <input class="dx-ColorInput" type="hidden" name="${model.name}" value="blah" />
+</div>

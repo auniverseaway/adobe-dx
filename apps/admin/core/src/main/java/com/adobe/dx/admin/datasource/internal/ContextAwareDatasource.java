@@ -91,6 +91,8 @@ public class ContextAwareDatasource {
         String confName = cfg.get(PN_CONF_NAME, StringUtils.EMPTY);
         String bucketName = cfg.get(PN_BUCKET_NAME, DEFAULT_BUCKET_NAME);
 
+        String nameDs = DataSource.class.getName();
+
         Resource contentResource = getContentResource();
 
         if (contentResource != null) {
