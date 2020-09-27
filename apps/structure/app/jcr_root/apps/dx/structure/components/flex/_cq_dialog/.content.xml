@@ -26,7 +26,6 @@
                             <mobileTabs
                                 jcr:primaryType="nt:unstructured"
                                 orientation="vertical"
-                                santosh="is-awesome"
                                 sling:resourceType="granite/ui/components/coral/foundation/tabs">
                                 <items jcr:primaryType="nt:unstructured">
                                     <flexLayout
@@ -35,7 +34,72 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/container"
                                         margin="{Boolean}false">
                                         <items jcr:primaryType="nt:unstructured">
-                                            
+                                            <minHeightContainer
+                                                granite:class="dx-Authoring--twoColumn"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <minHeight
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                        typeHint="Long"
+                                                        fieldLabel="Min Height"
+                                                        fieldDescription="Define the minimum height of the component."
+                                                        min="0"
+                                                        name="./mobileMinHeight"/>
+                                                    <type
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        fieldLabel="Type"
+                                                        name="./mobileMinHeightType">
+                                                        <items jcr:primaryType="nt:unstructured">
+                                                            <pixels
+                                                                jcr:primaryType="nt:unstructured"
+                                                                text="Pixels"
+                                                                value="px"/>
+                                                            <viewport
+                                                                jcr:primaryType="nt:unstructured"
+                                                                text="% of viewport"
+                                                                value="vh"/>
+                                                        </items>
+                                                    </type>
+                                                </items>
+                                            </minHeightContainer>
+                                            <gap
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                typeHint="Long"
+                                                fieldDescription="Space items"
+                                                fieldLabel="Gap (in PX)"
+                                                name="./gap"/>
+                                            <justification
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="Define left to right item orientation."
+                                                fieldLabel="Item Justification"
+                                                name="./mobileJustification">
+                                            </justification>
+                                            <itemAlignment
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="How items are aligned on the row they sit on."
+                                                fieldLabel="Item Alignment"
+                                                name="./mobileItemAlignment">
+                                            </itemAlignment>
+                                            <contentAlignment
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="How entire rows are aligned in the flex container."
+                                                fieldLabel="Row Alignment"
+                                                name="./mobileContentAlignment">
+                                            </contentAlignment>
+                                            <itemContentAlignment
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="Define how the items content is aligned vertically."
+                                                fieldLabel="Item Content Alignment"
+                                                name="./mobileItemContentAlignment">
+                                            </itemContentAlignment>
                                         </items>
                                     </flexLayout>
                                     <flexItems
