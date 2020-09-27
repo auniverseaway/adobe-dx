@@ -25,7 +25,7 @@ const MOBILE_QUERY = `(max-width: ${MOBILE_MAX}px)`;
 const TABLET_QUERY = `(min-width: ${TABLET_MIN}px) and (max-width: ${TABLET_MAX}px)`;
 const DESKTOP_QUERY = `(min-width: ${DESKTOP_MIN}px)`;
 
-const AUTHOR_VH_SELECTOR = '.has-AuthorVh';
+const AUTHOR_VH_SELECTOR = '.has-AuthorVh > dx-Flex-items';
 const FLEX_CLASS = 'flex';
 const FLEX_CONTAINER_SELECTOR = '.dx-Flex';
 const AEM_TOOLBAR_HEIGHT = 110;
@@ -45,7 +45,7 @@ const getVhAsPx = (viewHeight, vhValue) => {
 
 const mergeArrays = (arr, mergeArr) => {
     if (!arr || arr.length === 0) return mergeArr ? [...mergeArr] : [];
-    if (!mergeArr || mergeArr.length === 0) return arr ? [...arr] : [];
+    if (!mergeArr || mergeArr.length === 0) return [];
 
     let merged = [...arr].map((val, i) => {
         if (!(val || val === 0) && mergeArr[i]) {
