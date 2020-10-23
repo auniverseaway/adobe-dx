@@ -1,0 +1,34 @@
+// button[data-action="CONFIGURE_REACT"] + button[data-action="CONFIGURE"] {
+//     display: none;
+// }
+
+.dx-FlexDialog {
+    min-width: 760px;
+    max-width: 760px;
+    height: 700px;
+    overflow-y: scroll;
+
+    .react-spectrum-TabView-body {
+        padding: 0;
+    }
+    
+    .dx-FlexDialog--ResponsiveTabView {
+        padding: 30px 0 0 0;
+        min-height: 404px;
+
+        &:after {
+            content: "";
+            top: 0;
+            left: 0;
+            width: 160px;
+            position: absolute;
+            background-color: #efefef;
+            bottom: 0;
+            z-index: -1;
+        }
+    }
+    
+    .spectrum-Tabs.spectrum-Tabs--vertical {
+        min-width: 180px;
+    }
+}

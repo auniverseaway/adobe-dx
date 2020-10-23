@@ -237,10 +237,6 @@
                                                         max="100"
                                                         buttonSuffix="px"
                                                         name="./mobileMarginTop">
-                                                        <granite:rendercondition
-                                                            jcr:primaryType="nt:unstructured"
-                                                            sling:resourceType="dx/components/author/renderConditions/parent"
-                                                            hideIfParent="items" />
                                                     </marginTop>
                                                     <marginTopTypeHint
                                                         jcr:primaryType="nt:unstructured"
@@ -272,10 +268,6 @@
                                                         max="100"
                                                         buttonSuffix="px"
                                                         name="./mobileMarginBottom">
-                                                        <granite:rendercondition
-                                                            jcr:primaryType="nt:unstructured"
-                                                            sling:resourceType="dx/components/author/renderConditions/parent"
-                                                            hideIfParent="items" />
                                                     </marginBottom>
                                                     <marginBottomTypeHint
                                                         jcr:primaryType="nt:unstructured"
@@ -433,6 +425,7 @@
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <note
                                                         jcr:primaryType="nt:unstructured"
+                                                        granite:class="dx-Alert--fullWidth"
                                                         sling:resourceType="granite/ui/components/coral/foundation/alert"
                                                         size="S"
                                                         jcr:title="This will crop the video to fit the size of the component."/>
@@ -448,6 +441,7 @@
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <note
                                                         jcr:primaryType="nt:unstructured"
+                                                        granite:class="dx-Alert--fullWidth"
                                                         sling:resourceType="granite/ui/components/coral/foundation/alert"
                                                         size="S"
                                                         jcr:title="Video will be full-size. If contents go beyond this size, they will be cropped."/>
@@ -492,7 +486,6 @@
                                             <items
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                                fieldLabel="Items"
                                                 composite="{Boolean}true"
                                                 renderReadOnly="{Boolean}true">
                                                 <field
@@ -562,7 +555,6 @@
                                             <items
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                                fieldLabel="Items"
                                                 composite="{Boolean}true"
                                                 renderReadOnly="{Boolean}true">
                                                 <field

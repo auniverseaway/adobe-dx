@@ -1,0 +1,34 @@
+coral-multifield {
+    counter-reset: multifield;
+}
+
+coral-multifield-item {
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.625rem;
+
+    &:before {
+        content: counter(multifield);
+        position: absolute;
+        right: -16px;
+        top: -12px;
+        font-size: 18px;
+        counter-increment: multifield;
+        line-height: normal;
+        color: #707070;
+        font-weight: 300;
+        background: #e0e0e0;
+        padding: 0 4px 0 5px;
+        border-radius: 0 0 0 4px;
+    }
+
+    &:first-of-type {
+        &:before {
+            top: -10px;
+        }
+    }
+
+    &:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+}

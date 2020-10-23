@@ -1,0 +1,25 @@
+/* Pad our structure components to make them easier to select */
+.aem-AuthorLayer-Edit,
+.aem-AuthorLayer-structure,
+.aem-AuthorLayer-initial {
+    body {
+        padding: 0 0.5rem;
+    }
+
+    .dx-AuthorPadding {
+        padding: 0.5rem;
+        position: relative;
+    }
+}
+
+.dx-Flex-items {
+
+    &.cq-Editable-dom.cq-Editable-dom--container {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    > .new {
+        margin: 0;
+    }
+}

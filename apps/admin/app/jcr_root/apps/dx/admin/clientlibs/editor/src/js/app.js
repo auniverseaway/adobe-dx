@@ -3,6 +3,7 @@
 
 import RangeSlider from './components/slider';
 import { caColorfields } from './components/caColorfield';
+import flexToolbar from './toolbars/flex';
 
 (function init($, Granite, $document) {
     $document.on('dialog-loaded', (e) => {
@@ -15,4 +16,6 @@ import { caColorfields } from './components/caColorfield';
         const colorfields = e.dialog[0].querySelectorAll('.dx-CA-Colorfield');
         caColorfields(colorfields);
     });
+
+    flexToolbar($, Granite.author, $document);
 })(jQuery, Granite, jQuery(document));
