@@ -31,4 +31,43 @@
     .spectrum-Tabs.spectrum-Tabs--vertical {
         min-width: 180px;
     }
+
+    .dx-Multifield {
+        list-style: none;
+        counter-reset: multifield;
+    }
+}
+
+.dx-Multifield-item {
+    display: block;
+    position: relative;
+    padding-right: 100px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    z-index: 10020;
+
+    button.dx-Multifield-dragButton {
+        border: none;
+        cursor: grab;
+        height: 32px;
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    &:before {
+        content: counter(multifield);
+        position: absolute;
+        right: -16px;
+        top: -12px;
+        font-size: 18px;
+        counter-increment: multifield;
+        line-height: normal;
+        color: #707070;
+        font-weight: 300;
+        background: #e0e0e0;
+        padding: 0 4px 0 5px;
+        border-radius: 0 0 0 4px;
+    }
 }

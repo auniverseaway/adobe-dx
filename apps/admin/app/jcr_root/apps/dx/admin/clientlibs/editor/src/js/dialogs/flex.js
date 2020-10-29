@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@react/react-spectrum/Dialog';
 import Provider from '@react/react-spectrum/Provider';
 import { TabView, Tab } from '@react/react-spectrum/TabView';
@@ -6,21 +6,50 @@ import Underlay from '../../../../manager/src/js/ConfigManager/dialogs/Underlay'
 import ResponsiveContent from './responsiveContent';
 
 const FlexDialog = (props) => {
-    props.editable.path;
+    const [config, setConfig] = useState({});
+    const [currentTab, setCurrentTab] = useState();
+    const [responsiveTabs, setResponsiveTabs] = useState([]);
 
-    const resProps = [
-        { label: 'Mobile', prefix: '' },
-        { label: 'Tablet', prefix: 'tablet' },
-        { label: 'Desktop', prefix: 'desktop' },
-    ];
+    useEffect(() => {
+        async function fetchConfig() {
+            try {
+                const configPath = `${props.editable.path}.model.json`;
+                const response = await fetch(configPath);
+                const configRes = await response.json();
+                setConfig(configRes);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchConfig();
+    }, []);
 
-    const responsiveTabs = resProps.map((res) => {
-        return (
-            <Tab label={res.label} key={res.prefix}>
-                <ResponsiveContent label={res.label} prefix={res.prefix} />
-            </Tab>
-        );
-    });
+    const onChange = (configToSet, tab) => {
+        setConfig(configToSet);
+        // This tells the tab if it needs to update the UI.
+        setCurrentTab(tab);
+    };
+
+    const getResponsiveTabs = () => {
+        return config.breakpoints.map((breakpoint) => {
+            return (
+                <Tab label={breakpoint.label} key={breakpoint.key}>
+                    <ResponsiveContent
+                        config={config}
+                        tab={currentTab}
+                        key={breakpoint.key}
+                        onChange={onChange}
+                        label={breakpoint.label}
+                        suffix={breakpoint.suffix}
+                    />
+                </Tab>
+            );
+        });
+    };
+
+    if (config.breakpoints && responsiveTabs.length === 0) {
+        setResponsiveTabs(getResponsiveTabs(config));
+    }
 
     const destroyDialog = () => {
         const dialogContainer = window.document.querySelector('.dx-ReactDialogContainer');

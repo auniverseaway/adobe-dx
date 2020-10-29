@@ -34,10 +34,10 @@ const flexToolbar = ($, ns, $document) => {
      *
      */
 
-    const ACTION_ICON = 'wrench';
-    const ACTION_TITLE = 'Configure';
+    const ACTION_ICON = 'actions';
+    const ACTION_TITLE = 'Configure via React';
     const ACTION_NAME = 'CONFIGURE_REACT';
-    const RT_DX_PARLITE = 'dx/structure/components/flex';
+    const RT_DX_FLEX = 'dx/structure/components/flex';
 
     const showDialog = async (editable) => {
         const body = document.querySelector('body');
@@ -47,7 +47,7 @@ const flexToolbar = ($, ns, $document) => {
         ReactDOM.render(<FlexDialog editable={editable} />, dialogContainer);
     };
 
-    const showHideAction = new ns.ui.ToolbarAction({
+    const reactDialog = new ns.ui.ToolbarAction({
         name: ACTION_NAME,
         icon: ACTION_ICON,
         text: ACTION_TITLE,
@@ -56,7 +56,7 @@ const flexToolbar = ($, ns, $document) => {
             showDialog(editable);
         },
         condition: (editable) => {
-            return editable.type === RT_DX_PARLITE;
+            return editable.type === RT_DX_FLEX;
         },
         isNonMulti: true,
     });
@@ -64,13 +64,11 @@ const flexToolbar = ($, ns, $document) => {
     // When the Edit Layer gets activated
     $document.on('cq-layer-activated', (event) => {
         if (event.layer === 'Edit' || event.layer === 'structure' || event.layer === 'initial') {
-            showDialog(ns.editables[7]);
+            showDialog(ns.editables[6]);
             const toolbarActions = EditorFrame.editableToolbar.config.actions;
             if (!toolbarActions[ACTION_NAME]) {
                 // Register an additional action
-                EditorFrame.editableToolbar.registerAction(ACTION_NAME, showHideAction);
-            } else {
-                console.log('already registered');
+                EditorFrame.editableToolbar.registerAction(ACTION_NAME, reactDialog);
             }
         }
     });
