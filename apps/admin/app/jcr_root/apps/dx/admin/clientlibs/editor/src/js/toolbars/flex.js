@@ -62,9 +62,13 @@ const flexToolbar = ($, ns, $document) => {
     });
 
     // When the Edit Layer gets activated
+    $document.on('cq-asset-dropped dragenter drop', (event) => {
+        console.log(event);
+    });
+
     $document.on('cq-layer-activated', (event) => {
         if (event.layer === 'Edit' || event.layer === 'structure' || event.layer === 'initial') {
-            showDialog(ns.editables[6]);
+            showDialog(ns.editables[4]);
             const toolbarActions = EditorFrame.editableToolbar.config.actions;
             if (!toolbarActions[ACTION_NAME]) {
                 // Register an additional action

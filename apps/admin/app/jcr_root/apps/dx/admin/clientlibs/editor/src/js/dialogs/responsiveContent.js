@@ -43,31 +43,36 @@ const convertToArray = (definitions) => {
 const ResponsiveContent = (props) => {
     const [items, setItems] = useState([]);
 
-    const { tab, key } = props;
+    const { tab, bKey } = props;
     const definitions = props.config.resource[`definitions${props.suffix}`];
 
     useEffect(() => {
-        if (definitions || tab === key) {
-            setItems(convertToArray(definitions));
-            props.onChange(props.config, null);
+        let defs = [];
+        if (definitions || tab === bKey) {
+            defs = convertToArray(definitions);
         }
-    }, [definitions, tab]);
+        setItems(defs);
+    }, [definitions, tab, bKey]);
 
     const tabviewLabel = `${props.label} TabView`;
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
-        setItems(arrayMove(items, oldIndex, newIndex));
+        const arr = arrayMove(items, oldIndex, newIndex);
+        props.config.resource[`definitions${props.suffix}`] = arr.reduce((newItems, item, idx) => {
+            newItems[`item${idx}`] = item;
+            return newItems;
+        }, {});
+        props.onChange(props.config, bKey);
     };
 
     const onSelectChange = (val, field) => {
         props.config.resource[`definitions${props.suffix}`][field.item][field.name] = val;
-        props.onChange(props.config, key);
+        props.onChange(props.config, bKey);
     };
 
     const SortableItem = sortableElement(({ value }) => (
         <li className="dx-Multifield-item">
             <Select
-                name="width"
                 value={value.width}
                 onChange={(selectVal) =>
                     onSelectChange(selectVal, { name: 'width', item: value.itemName })
@@ -82,6 +87,27 @@ const ResponsiveContent = (props) => {
         <SortableItem key={`item-${value}`} index={index} value={value} />
     ));
 
+    const handleDragEnter = (e) => {
+        console.log(e);
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    const handleDragLeave = (e) => {
+        console.log(e);
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    const handleDragOver = (e) => {
+        console.log(e);
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    const handleDrop = (e) => {
+        console.log(e);
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
     return (
         <TabView
             aria-label={tabviewLabel}
@@ -89,6 +115,21 @@ const ResponsiveContent = (props) => {
             className="dx-FlexDialog--ResponsiveTabView"
         >
             <Tab label="Items">
+                <input
+                    type="file"
+                    name="image"
+                    onDrop={(e) => handleDrop(e)}
+                    onDragOver={(e) => handleDragOver(e)}
+                    onDragEnter={(e) => handleDragEnter(e)}
+                    onDragLeave={(e) => handleDragLeave(e)}
+                />
+                <div
+                    className="drag-drop-zone"
+                    onDrop={(e) => handleDrop(e)}
+                    onDragOver={(e) => handleDragOver(e)}
+                    onDragEnter={(e) => handleDragEnter(e)}
+                    onDragLeave={(e) => handleDragLeave(e)}
+                />
                 <SortableContainer onSortEnd={onSortEnd} useDragHandle>
                     {sortableItems}
                 </SortableContainer>

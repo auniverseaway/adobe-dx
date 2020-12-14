@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { unmountComponentAtNode } from 'react-dom';
 import Dialog from '@react/react-spectrum/Dialog';
 import Provider from '@react/react-spectrum/Provider';
 import { TabView, Tab } from '@react/react-spectrum/TabView';
 import Underlay from '../../../../manager/src/js/ConfigManager/dialogs/Underlay';
 import ResponsiveContent from './responsiveContent';
+import fetchConfig from './fetchConfig';
+import getCsrf from '../../../../manager/src/js/ConfigManager/utils/csrf';
+
+const getPathAndName = (fullPath) => {
+    const parts = fullPath.split('/');
+    const name = parts.pop();
+    const path = parts.join('/');
+    return { path, name };
+};
 
 const FlexDialog = (props) => {
     const [config, setConfig] = useState({});
     const [currentTab, setCurrentTab] = useState();
     const [responsiveTabs, setResponsiveTabs] = useState([]);
 
+    const { path } = props.editable;
+
     useEffect(() => {
-        async function fetchConfig() {
-            try {
-                const configPath = `${props.editable.path}.model.json`;
-                const response = await fetch(configPath);
-                const configRes = await response.json();
-                setConfig(configRes);
-            } catch (err) {
-                console.error(err);
-            }
-        }
-        fetchConfig();
+        fetchConfig(path, setConfig);
     }, []);
 
     const onChange = (configToSet, tab) => {
         setConfig(configToSet);
-        // This tells the tab if it needs to update the UI.
         setCurrentTab(tab);
     };
 
@@ -37,7 +38,7 @@ const FlexDialog = (props) => {
                     <ResponsiveContent
                         config={config}
                         tab={currentTab}
-                        key={breakpoint.key}
+                        bKey={breakpoint.key}
                         onChange={onChange}
                         label={breakpoint.label}
                         suffix={breakpoint.suffix}
@@ -47,16 +48,37 @@ const FlexDialog = (props) => {
         });
     };
 
-    if (config.breakpoints && responsiveTabs.length === 0) {
+    if ((config && config.breakpoints && responsiveTabs.length === 0) || currentTab) {
         setResponsiveTabs(getResponsiveTabs(config));
+        setCurrentTab(null);
     }
 
     const destroyDialog = () => {
+        unmountComponentAtNode(document.querySelector('.dx-Provider--dialog'));
         const dialogContainer = window.document.querySelector('.dx-ReactDialogContainer');
         dialogContainer.remove();
     };
 
-    const dialogConfirm = () => {
+    const dialogConfirm = async () => {
+        const urlParts = getPathAndName(path);
+
+        const formData = new FormData();
+        formData.append(':operation', 'import');
+        formData.append(':contentType', 'json');
+        formData.append(':replace', true);
+
+        formData.append(':name', urlParts.name);
+        formData.append(':content', JSON.stringify(config.resource));
+
+        const csrf = await getCsrf();
+
+        await fetch(urlParts.path, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'CSRF-Token': csrf.token },
+            body: formData,
+        });
+
         props.editable.refresh();
         destroyDialog();
     };
@@ -66,7 +88,7 @@ const FlexDialog = (props) => {
     };
 
     return (
-        <Provider theme="light">
+        <Provider theme="light" className="dx-Provider--dialog">
             <Underlay open />
             <Dialog
                 open
